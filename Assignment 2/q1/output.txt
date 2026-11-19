@@ -1,0 +1,93 @@
+Java 21.0.12.1
+
+=== W1 one short ticket: 1 ticket(s) x 50 fields (avg of 20 runs, 20000 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +                 0.004               0.02                    ~50
+CSV,W1 one short ticket,String +,50,1,0.004417600000000001,21680.0
+StringBuilder            0.002               0.00        ~1 (final only)
+CSV,W1 one short ticket,StringBuilder,50,1,0.00159825,3248.0
+StringBuffer             0.002               0.00        ~1 (final only)
+CSV,W1 one short ticket,StringBuffer,50,1,0.0015830999999999998,3256.0
+String.join              0.002               0.00        ~1 (final only)
+CSV,W1 one short ticket,String.join,50,1,0.00197935,1040.0
+StringJoiner             0.000               0.00        ~1 (final only)
+CSV,W1 one short ticket,StringJoiner,50,1,4.2925E-4,1344.0
+String.format            0.004               0.01 ~50 (per-field format)
+CSV,W1 one short ticket,String.format,50,1,0.0043482,14824.0
+
+=== W2 many tickets: 10000 ticket(s) x 50 fields (avg of 10 runs, 3 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +                29.757             206.76                ~500000
+CSV,W2 many tickets,String +,50,10000,29.757023,2.168E8
+StringBuilder            6.846              30.75    ~10000 (final only)
+CSV,W2 many tickets,StringBuilder,50,10000,6.8457572,3.224E7
+StringBuffer             7.706              31.05    ~10000 (final only)
+CSV,W2 many tickets,StringBuffer,50,10000,7.7064985,3.256E7
+String.join              2.322               9.69    ~10000 (final only)
+CSV,W2 many tickets,String.join,50,10000,2.3220107999999997,1.016E7
+StringJoiner             5.486              12.82    ~10000 (final only)
+CSV,W2 many tickets,StringJoiner,50,10000,5.486054,1.344E7
+String.format           31.708             152.82 ~500000 (per-field format)
+CSV,W2 many tickets,String.format,50,10000,31.7077249,1.6024E8
+
+=== W3 one huge ticket: 1 ticket(s) x 5000 fields (avg of 10 runs, 3 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +                36.870             229.04                  ~5000
+CSV,W3 one huge ticket,String +,5000,1,36.870149600000005,2.4017008E8
+StringBuilder            0.077               0.37        ~1 (final only)
+CSV,W3 one huge ticket,StringBuilder,5000,1,0.0769227,392944.0
+StringBuffer             0.079               0.37        ~1 (final only)
+CSV,W3 one huge ticket,StringBuffer,5000,1,0.07866110000000001,392976.0
+String.join              0.031               0.11        ~1 (final only)
+CSV,W3 one huge ticket,String.join,5000,1,0.030603,117816.0
+StringJoiner             0.068               0.16        ~1 (final only)
+CSV,W3 one huge ticket,StringJoiner,5000,1,0.0683362,163480.0
+
+=== W3 one huge ticket: 1 ticket(s) x 10000 fields (avg of 10 runs, 3 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +               153.777             933.96                 ~10000
+CSV,W3 one huge ticket,String +,10000,1,153.7768897,9.7933008E8
+StringBuilder            0.144               0.75        ~1 (final only)
+CSV,W3 one huge ticket,StringBuilder,10000,1,0.1437332,787872.0
+StringBuffer             0.293               0.75        ~1 (final only)
+CSV,W3 one huge ticket,StringBuffer,10000,1,0.293383,787904.0
+String.join              0.074               0.23        ~1 (final only)
+CSV,W3 one huge ticket,String.join,10000,1,0.0735841,237816.0
+StringJoiner             0.122               0.31        ~1 (final only)
+CSV,W3 one huge ticket,StringJoiner,10000,1,0.1222821,329032.0
+
+=== W3 one huge ticket: 1 ticket(s) x 20000 fields (avg of 10 runs, 3 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +               526.681            3869.70                 ~20000
+CSV,W3 one huge ticket,String +,20000,1,526.6810557,4.05767008E9
+StringBuilder            0.617               1.52        ~1 (final only)
+CSV,W3 one huge ticket,StringBuilder,20000,1,0.6167373,1597712.0
+StringBuffer             0.632               1.52        ~1 (final only)
+CSV,W3 one huge ticket,StringBuffer,20000,1,0.6317289,1597744.0
+String.join              0.193               0.47        ~1 (final only)
+CSV,W3 one huge ticket,String.join,20000,1,0.1928777,497816.0
+StringJoiner             0.327               0.65        ~1 (final only)
+CSV,W3 one huge ticket,StringJoiner,20000,1,0.3267952,680120.0
+
+=== W3 one huge ticket: 1 ticket(s) x 40000 fields (avg of 10 runs, 3 warm-up) ===
+Approach             time (ms)     allocated (MB)  intermediate Strings*
+String +              2318.459           16035.41                 ~40000
+CSV,W3 one huge ticket,String +,40000,1,2318.4586153,1.681435008E10
+StringBuilder            0.570               3.07        ~1 (final only)
+CSV,W3 one huge ticket,StringBuilder,40000,1,0.5696699000000001,3217376.0
+StringBuffer             0.788               3.07        ~1 (final only)
+CSV,W3 one huge ticket,StringBuffer,40000,1,0.7877439,3217408.0
+String.join              0.393               0.97        ~1 (final only)
+CSV,W3 one huge ticket,String.join,40000,1,0.3927785,1017816.0
+StringJoiner             0.589               1.32        ~1 (final only)
+CSV,W3 one huge ticket,StringJoiner,40000,1,0.5887673,1382280.0
+
+=== Heap used before/after building ONE ticket of 20000 fields (Runtime, after gc) ===
+String +       heap before=3480 KB, after=102280 KB (garbage not yet collected), thread-allocated=3869.7 MB
+StringBuilder  heap before=2968 KB, after=5200 KB (garbage not yet collected), thread-allocated=1.5 MB
+
+=== Shared booking log: 4 threads x 20,000 appends of 'x' (expected length 80,000), 30 trials ===
+StringBuilder  trials with lost updates=2, trials with exception=1 (of 30)
+StringBuffer   trials with lost updates=0, trials with exception=0 (of 30)
+
+(sink=859392086)
