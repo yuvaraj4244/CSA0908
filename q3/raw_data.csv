@@ -1,0 +1,10 @@
+n,structure,ns_per_scan,bytes_allocated
+10000,HashSet<Student>,224.21616,691248
+10000,TreeSet<Student>(regNo),849.00352,400080
+10000,"HashMap<String,Student>",35.03926,451232
+100000,HashSet<Student>,85.801118,5297392
+100000,TreeSet<Student>(regNo),209.208352,4000080
+100000,"HashMap<String,Student>",40.517683999999996,5297376
+1000000,HashSet<Student>,81.1343656,48777488
+1000000,TreeSet<Student>(regNo),250.4695628,40000080
+1000000,"HashMap<String,Student>",70.65431659999999,48777488
