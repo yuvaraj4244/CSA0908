@@ -1,0 +1,51 @@
+Java 21.0.12.1
+
+=== Correctness check: 8 patients ===
+Arrival order : Ravi(S3) Meena(S1) John(S3) Asha(S5) Kumar(S1) Lata(S2) Divya(S2) Imran(S4)
+Hand-derived  : Meena(S1) Kumar(S1) Lata(S2) Divya(S2) Ravi(S3) John(S3) Imran(S4) Asha(S5)
+println(pq)   : [Meena(S1), Kumar(S1), Lata(S2), Imran(S4), Ravi(S3), John(S3), Divya(S2), Asha(S5)]   <- heap array order, NOT treatment order
+Waiting list  : Meena(S1) Kumar(S1) Lata(S2) Divya(S2) Ravi(S3) John(S3) Imran(S4) Asha(S5)   <- displayed by sorting a COPY (O(n log n)); queue untouched, size=8
+poll() order  : Meena(S1) Kumar(S1) Lata(S2) Divya(S2) Ravi(S3) John(S3) Imran(S4) Asha(S5)
+matches hand-derived order: true
+
+=== Growth: PriorityQueue admit (add) and next (poll), random severities ===
+n             add ns/op   poll ns/op        cmp/add       cmp/poll    2*log2(n)
+1000               63.9        152.6           1.82          15.02         19.9
+CSV,1000,63.9302,152.5968,1.819,15.016
+10000              46.1        124.5           1.84          21.64         26.6
+CSV,10000,46.10114,124.52698000000001,1.8356,21.6449
+100000             39.2        206.1           1.82          28.30         33.2
+CSV,100000,39.238948,206.081646,1.82049,28.29793
+1000000            39.9        437.2           1.81          34.91         39.9
+CSV,1000000,39.8905904,437.24321380000004,1.810086,34.910472
+
+=== Steady state: n waiting, 200,000 x (admit one + serve one), ns per pair ===
+n=1000           146.9 ns per (admit+serve)
+CSV_STEADY,1000,146.92206
+n=10000          184.6 ns per (admit+serve)
+CSV_STEADY,10000,184.60677399999997
+n=100000         263.0 ns per (admit+serve)
+CSV_STEADY,100000,263.030376
+n=1000000        466.8 ns per (admit+serve)
+CSV_STEADY,1000000,466.773952
+
+=== Alternatives: admit n patients then serve all (total ms, mean of 5) ===
+n           PriorityQueue  sorted LinkedList      5 FIFO queues
+5000                 1.84              31.59               0.35   same service order: true
+CSV_ALT,5000,1.83761,31.5886608,0.34814459999999997
+10000                1.86             127.56               0.20   same service order: true
+CSV_ALT,10000,1.859962,127.5648138,0.200973
+20000                3.91             774.59               0.39   same service order: true
+CSV_ALT,20000,3.914003,774.5873622,0.38750959999999995
+40000                8.79            9325.76               0.60   same service order: true
+CSV_ALT,40000,8.790188,9325.758225200001,0.5954984
+
+=== Starvation: one S5 patient at t=0; every tick 2 new patients (S1..S4) arrive but only 1 is served (backlog grows); 5,000 ticks ===
+plain PQ: S5 patient STILL WAITING after 5,000 ticks (backlog 5001 patients)
+aging, +1 level every T=50 ticks: S5 patient served at tick 200  (S5 reaches level 1 after 200 ticks)
+aging, +1 level every T=100 ticks: S5 patient served at tick 400  (S5 reaches level 1 after 400 ticks)
+aging, +1 level every T=200 ticks: S5 patient served at tick 800  (S5 reaches level 1 after 800 ticks)
+
+=== Deployment: a day of 5,000 arrivals (random severities), peak backlog 500 ===
+whole day processed in 0.760 ms  => 151.9 ns per patient (an arrival every ~17 s on average)
+(sink=40870796)

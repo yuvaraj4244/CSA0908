@@ -1,0 +1,49 @@
+Java 21.0.12.1
+
+--- TEST 1: scans that appear to work (same object scanned twice) -- BadStudent ---
+Test 1: add a, d, a (same reference)                       predicted=2 observed=2  [MATCH]
+      reason: same reference => same identity hashCode => same bucket, and HashMap short-circuits on '=='.
+
+--- TEST 2: scans that expose duplicates -- BadStudent ---
+      identity hashCodes of the two 'Arun' objects: 5a07e868 vs 76ed5528
+Test 2: add Arun, Divya, new-Arun (equal but distinct objects) predicted=2 observed=3  [DIFFERS]
+      reason: equal objects got different hashCodes (Object.hashCode = identity), so HashSet looked in another bucket and never called equals().
+      (Prediction made from equals() alone is 2; the contract violation makes the real answer 3.)
+
+--- TEST 2b: the same scans with the corrected GoodStudent ---
+Test 2b: same scans, GoodStudent                           predicted=2 observed=2  [MATCH]
+      reason: equal objects now share a hashCode => same bucket => equals() merges them.
+
+--- TEST 3 (own): field used in hashCode() changed after insertion -- MutableStudent ---
+      after mutation: contains(m)=false, remove(m)=false, size=1
+Test 3: size after re-adding the mutated object (stale copy remains) predicted=1 observed=2  [DIFFERS]
+      reason: the entry sits in the bucket of the OLD hash; lookups use the NEW hash, so it is lost ('ghost' entry) and re-adding creates a second copy.
+
+--- TEST 4 (own): TreeSet whose compareTo is inconsistent with equals ---
+Test 4: two different students, same name: TreeSet(by name) size predicted=2 observed=1  [DIFFERS]
+      reason: TreeSet never calls equals(); compare()==0 means 'duplicate', so the second student is silently dropped. HashSet size = 2.
+
+--- Contract verification for the corrected class ---
+x.equals(y)=true && hashCode equal=true  (equal objects must have equal hashCodes)  -> PASS
+1000 equal BadStudent objects produced 1000 distinct hashCodes (contract needs 1)
+
+--- Alternative structures: n scans of n unique students (ns per scan, mean of 5 runs; allocated MB) ---
+n          structure                     ns/scan       alloc MB
+10000      HashSet<Student>                224.2            0.7
+CSV,10000,HashSet<Student>,224.21616,691248
+10000      TreeSet<Student>(regNo)          849.0            0.4
+CSV,10000,TreeSet<Student>(regNo),849.00352,400080
+10000      HashMap<String,Student>           35.0            0.4
+CSV,10000,HashMap<String,Student>,35.03926,451232
+100000     HashSet<Student>                 85.8            5.1
+CSV,100000,HashSet<Student>,85.801118,5297392
+100000     TreeSet<Student>(regNo)          209.2            3.8
+CSV,100000,TreeSet<Student>(regNo),209.208352,4000080
+100000     HashMap<String,Student>           40.5            5.1
+CSV,100000,HashMap<String,Student>,40.517683999999996,5297376
+1000000    HashSet<Student>                 81.1           46.5
+CSV,1000000,HashSet<Student>,81.1343656,48777488
+1000000    TreeSet<Student>(regNo)          250.5           38.1
+CSV,1000000,TreeSet<Student>(regNo),250.4695628,40000080
+1000000    HashMap<String,Student>           70.7           46.5
+CSV,1000000,HashMap<String,Student>,70.65431659999999,48777488

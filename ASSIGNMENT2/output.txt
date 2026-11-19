@@ -1,0 +1,20 @@
+Java 21.0.12.1
+Scenario: n patients waiting at tick 0; then 500 ticks of (promote/age, admit 1, serve 1); aging step T=20 ticks.
+Mean of 3 measured runs after 1 warm-up.
+
+n        | ORIG ms            ms/tick      comparisons       alloc MB | REDESIGN ms      ms/tick ops (checks+prom)       alloc MB | speed-up same order
+1000     | 15.4                 0.031           861743            2.0 | 0.946            0.00189             8052           0.06 | 16       true     
+CSV,1000,15.360815333333333,861743,2056000,0.946474,8052,64312,true
+5000     | 69.3                 0.139          4891670            9.6 | 1.321            0.00264            23980           0.15 | 52       true     
+CSV,5000,69.30516433333334,4891670,10056000,1.3212353333333333,23980,158608,true
+20000    | 279.7                0.559         18868683           38.2 | 2.825            0.00565            83844           0.51 | 99       true     
+CSV,20000,279.66547966666667,18868683,40056000,2.8249536666666666,83844,535776,true
+50000    | 723.0                1.446         46257782           95.4 | 5.199            0.01040           204118           1.51 | 139      true     
+CSV,50000,723.0102596666667,46257782,100056000,5.199164333333333,204118,1585224,true
+100000   | 1474.8               2.950         91710917          190.8 | 9.931            0.01986           404124           2.82 | 148      true     
+CSV,100000,1474.77538,91710917,200056000,9.931189,404124,2960624,true
+
+Small check (8 patients, T=2, 6 ticks, no new arrivals): service order of both designs
+original  : 3 6 1 7 4 0 2 5 
+redesigned: 3 6 1 7 4 0 2 5    equal=true
+(sink=0)
