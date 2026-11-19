@@ -1,0 +1,30 @@
+=== Data set A (ties at all three levels) ===
+expected by hand: Hawks, Lions, Tigers (12,+5, name) > Wolves (12,+2) > Bears (9,+7) > Foxes, Ravens (9,+3) > Dolphins, Sharks (4,-1) > Owls
+observed: [Hawks(12,5), Lions(12,5), Tigers(12,5), Wolves(12,2), Bears(9,7), Foxes(9,3), Ravens(9,3), Dolphins(4,-1), Sharks(4,-1), Owls(0,-9)]
+order independent of input order over 200 shuffles: true
+
+=== Data set B (designed to break faulty comparators) ===
+(1) points compared by SUBTRACTION. compare(Big, Neg) = 1294967296 (should be negative: Big has more points). Overflow!
+    sorted with subtraction : [Neg(-1500000000,0), Big(1500000000,0)]
+    sorted with the real one: [Big(1500000000,0), Neg(-1500000000,0)]
+(2) comparator IGNORING tie-breakers: input order 1 -> [Panthers(9,4), Eagles(9,6), Bisons(9,4)], input order 2 -> [Bisons(9,4), Eagles(9,6), Panthers(9,4)]  (result depends on input => not a ranking)
+    correct comparator             : input order 1 -> [Eagles(9,6), Bisons(9,4), Panthers(9,4)], input order 2 -> [Eagles(9,6), Bisons(9,4), Panthers(9,4)]
+(3) 'within 2 points = equal': A~B=0, B~C=0, but A vs C=1  -> equality is not transitive, principle violated
+    sort threw: Comparison method violates its general contract!
+
+=== Generic reuse ===
+Comparable<CTeam> + RankedList<T extends Comparable<? super T>>: [Eagles(9,6), Bisons(9,4), Panthers(9,4), Cobras(6,1)]
+Leaderboard<String> (same class, new comparator): [apple, kiwi, pear, plum, fig]
+Leaderboard<String> with Comparator<Object> (? super T): [a, b]
+List<? extends Team> printTop on List<CTeam>:
+  top 2: [Eagles(9,6), Bisons(9,4)]
+
+=== One comparator chain vs three stable sorts (ms, mean of 7 runs, 3 warm-up) ===
+n            chain (1 sort)     3 stable sorts   Comparable<Team>
+10000                   3.0                9.6                2.8   same result chain==3sorts: true
+CSV,10000,2.984892285714286,9.592839428571429,2.8137924285714284
+100000                 44.0               78.4               26.4   same result chain==3sorts: true
+CSV,100000,43.95619428571428,78.39068871428572,26.40478457142857
+1000000               931.1             1453.6              491.2   same result chain==3sorts: true
+CSV,1000000,931.051938,1453.612183142857,491.22161828571427
+(sink=33300000)
