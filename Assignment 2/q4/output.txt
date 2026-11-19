@@ -1,0 +1,50 @@
+Java 21.0.12.1
+100,000 random lookups; reports; mean of runs (3 warm-up, 5 measured). ms unless stated.
+n         structure           build   100k lookups    ns/lookup   code-order insert-ord  orders OK
+1000      HashMap              0.19           4.80         48.0         0.62       0.05 code:Y/ins:Y
+CSV,1000,HashMap,0.1902386,4.8045462,0.6176806,0.047121800000000005
+1000      TreeMap              0.51          12.81        128.1         0.09       0.05 code:Y/ins:Y
+CSV,1000,TreeMap,0.5135794,12.813814800000001,0.0869578,0.0471822
+1000      LinkedHashMap        0.18           2.86         28.6         0.44       0.07 code:Y/ins:Y
+CSV,1000,LinkedHashMap,0.1824846,2.8581666,0.437023,0.0696444
+1000      Hashtable            0.21           3.64         36.4         0.18       0.04 code:Y/ins:Y
+CSV,1000,Hashtable,0.210599,3.6372144,0.1830662,0.0421142
+   raw iteration of HashMap       at n=1000: code-sorted=false, insertion-ordered=false
+   raw iteration of TreeMap       at n=1000: code-sorted=true, insertion-ordered=false
+   raw iteration of LinkedHashMap at n=1000: code-sorted=false, insertion-ordered=true
+1000      sorted[]+bsearch       0.44          16.76        167.6  0 (already)        n/a   insert=3302 ns/op (arraycopy shifting)
+CSV,1000,sortedArray,0.44169620000000004,16.7629708,0,0,3301.529
+10000     HashMap              0.80           3.13         31.3         2.22       0.24 code:Y/ins:Y
+CSV,10000,HashMap,0.800732,3.1278728,2.21632,0.2371012
+10000     TreeMap              2.71          20.98        209.8         0.36       0.13 code:Y/ins:Y
+CSV,10000,TreeMap,2.7111852,20.983667399999998,0.3562154,0.1308654
+10000     LinkedHashMap        0.66           3.57         35.7         3.02       0.21 code:Y/ins:Y
+CSV,10000,LinkedHashMap,0.6581434,3.5661872000000003,3.0210434,0.2080108
+10000     Hashtable            0.74           3.85         38.5         1.73       0.17 code:Y/ins:Y
+CSV,10000,Hashtable,0.7375632,3.848696,1.7333056,0.16626939999999998
+10000     sorted[]+bsearch       3.99          21.54        215.4  0 (already)        n/a   insert=1187 ns/op (arraycopy shifting)
+CSV,10000,sortedArray,3.98791,21.539528,0,0,1186.5980000000002
+100000    HashMap             15.36           5.70         57.0        19.62       1.62 code:Y/ins:Y
+CSV,100000,HashMap,15.3617884,5.6999526,19.6192406,1.6248316
+100000    TreeMap             69.00          62.98        629.8         6.52       1.53 code:Y/ins:Y
+CSV,100000,TreeMap,68.9976482,62.976239,6.5207568,1.5345461999999999
+100000    LinkedHashMap       16.54           6.19         61.9        46.29       1.14 code:Y/ins:Y
+CSV,100000,LinkedHashMap,16.5411306,6.1900352000000005,46.2947586,1.142375
+100000    Hashtable           12.46           4.96         49.6        11.29       0.83 code:Y/ins:Y
+CSV,100000,Hashtable,12.4561118,4.9645078,11.290008199999999,0.8310188000000001
+100000    sorted[]+bsearch      58.13          42.92        429.2  0 (already)        n/a   insert=890 ns/op (arraycopy shifting)
+CSV,100000,sortedArray,58.1308066,42.9226548,0,0,890.174
+1000000   HashMap            183.29           9.06         90.6       487.33      29.39 code:Y/ins:Y
+CSV,1000000,HashMap,183.28958066666667,9.0621404,487.33465133333334,29.38836966666667
+1000000   TreeMap           1476.24         136.56       1365.6       144.04      23.45 code:Y/ins:Y
+CSV,1000000,TreeMap,1476.24159,136.5601924,144.03543633333334,23.454206
+1000000   LinkedHashMap      213.10          17.02        170.2       754.11      20.64 code:Y/ins:Y
+CSV,1000000,LinkedHashMap,213.10461566666666,17.0176022,754.11347,20.644413333333333
+1000000   Hashtable          150.00           9.66         96.6       382.58      19.17 code:Y/ins:Y
+CSV,1000000,Hashtable,149.99571433333335,9.655924599999999,382.577358,19.16967166666667
+   raw iteration of HashMap       at n=1000000: code-sorted=false, insertion-ordered=false
+   raw iteration of TreeMap       at n=1000000: code-sorted=true, insertion-ordered=false
+   raw iteration of LinkedHashMap at n=1000000: code-sorted=false, insertion-ordered=true
+1000000   sorted[]+bsearch     745.95         138.19       1381.9  0 (already)        n/a   insert=7414 ns/op (arraycopy shifting)
+CSV,1000000,sortedArray,745.952481,138.18979919999998,0,0,7414.165
+(sink=4068046640)
