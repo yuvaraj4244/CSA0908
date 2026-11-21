@@ -1,0 +1,12 @@
+Java 21.0.12.1
+=== 10000 files, real local files (OS page cache); time = mean of 3 runs after 1 warm-up; cores=2 ===
+approach                            time (ms)   peak threads  extra VmPeak MB
+ExecutorService fixed pool, p=2         182.0      2 (+main)               ~0
+CSV_ALT,pool2,182.0
+ExecutorService fixed pool, p=4         116.0      4 (+main)               ~0
+CSV_ALT,pool4,116.0
+parallelStream (common pool)             94.4              2               ~0
+CSV_ALT,parallelStream,94.43824633333334
+one Thread per file (gate: all alive)     4278.1          10007             9943 
+CSV_ALT,threadPerFile,4278.087872666667,10007,9942.5
+default thread stack size (-XX:ThreadStackSize) is 1024 KB on 64-bit Linux -> reserved virtual memory = threads x 1 MB

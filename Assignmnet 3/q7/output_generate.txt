@@ -1,0 +1,1 @@
+generated 10000 ids: ok=9300 corrupt=500 missing=200 sum=465007 passed=9300

@@ -1,0 +1,29 @@
+Java 21.0.12.1, cores=2
+
+=== 10000 files: expected ok=9300 corrupt=500 missing=200 sum=465007 passed=9300 ===
+
+-- storage: local files, OS page cache (real); mean of 5 runs after 1 warm-up
+threads  time (ms)    speed-up   min (ms)    max (ms)    summary correct?
+1        219.0        1.00       167        251        YES (all 5 runs)
+CSV_POOL,real,1,219.0,167.0,251.0,true
+2        120.0        1.83       109        138        YES (all 5 runs)
+CSV_POOL,real,2,120.0,109.0,138.0,true
+4        72.4         3.02       62         78         YES (all 5 runs)
+CSV_POOL,real,4,72.4,62.0,78.0,true
+8        59.8         3.66       57         65         YES (all 5 runs)
+CSV_POOL,real,8,59.8,57.0,65.0,true
+16       69.6         3.15       60         78         YES (all 5 runs)
+CSV_POOL,real,16,69.6,60.0,78.0,true
+
+-- storage: simulated 0.5 ms I/O latency per file; mean of 5 runs after 1 warm-up
+threads  time (ms)    speed-up   min (ms)    max (ms)    summary correct?
+1        6386.2       1.00       6323       6435       YES (all 5 runs)
+CSV_POOL,slow,1,6386.2,6323.0,6435.0,true
+2        3164.8       2.02       3112       3199       YES (all 5 runs)
+CSV_POOL,slow,2,3164.8,3112.0,3199.0,true
+4        1568.2       4.07       1554       1587       YES (all 5 runs)
+CSV_POOL,slow,4,1568.2,1554.0,1587.0,true
+8        779.0        8.20       768        788        YES (all 5 runs)
+CSV_POOL,slow,8,779.0,768.0,788.0,true
+16       390.4        16.36      385        396        YES (all 5 runs)
+CSV_POOL,slow,16,390.4,385.0,396.0,true

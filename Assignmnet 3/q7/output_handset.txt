@@ -1,0 +1,56 @@
+Java 21.0.12.1, cores=2
+
+=== Hand-checked set: 12 ids. Worked out BY HAND before running: ===
+H01..H08 valid: totals 100, 50, 40, 30, 50, 55, 0, 90  -> sum = 415; passed (>= 40): H01,H02,H03,H05,H06,H08 = 6
+H09 corrupt (non-numeric score), H10 corrupt (truncated)  -> corrupt = 2
+H11, H12 listed but no file -> missing = 2          => ok=8, corrupt=2, missing=2, 8+2+2=12
+
+--- pool of 1 thread(s) ---
+SEMESTER RESULT PROCESSING SUMMARY
+files requested : 12
+processed OK    : 8  (passed 6, failed 2, sum of totals 415)
+corrupt         : 2
+missing         : 2
+io error        : 0
+timeout         : 0
+unexpected      : 0
+OK + failures = 12 (must equal 12: YES)
+   CORRUPT H09  - H09: non-numeric score on line 3 'abc'
+   CORRUPT H10  - H10: expected 10 score lines but found 3
+   MISSING H11  - no such file
+   MISSING H12  - no such file
+MATCHES HAND-CHECKED EXPECTATION: PASS
+
+--- pool of 4 thread(s) ---
+SEMESTER RESULT PROCESSING SUMMARY
+files requested : 12
+processed OK    : 8  (passed 6, failed 2, sum of totals 415)
+corrupt         : 2
+missing         : 2
+io error        : 0
+timeout         : 0
+unexpected      : 0
+OK + failures = 12 (must equal 12: YES)
+   CORRUPT H09  - H09: non-numeric score on line 3 'abc'
+   CORRUPT H10  - H10: expected 10 score lines but found 3
+   MISSING H11  - no such file
+   MISSING H12  - no such file
+MATCHES HAND-CHECKED EXPECTATION: PASS
+
+=== Fault injection: H05 throws IllegalStateException (bug), H06 hangs 2 s with a 300 ms limit ===
+SEMESTER RESULT PROCESSING SUMMARY
+files requested : 12
+processed OK    : 6  (passed 4, failed 2, sum of totals 310)
+corrupt         : 2
+missing         : 2
+io error        : 0
+timeout         : 1
+unexpected      : 1
+OK + failures = 12 (must equal 12: YES)
+   UNEXPECTED H05  - java.lang.IllegalStateException: injected bug for H05
+   TIMEOUT H06  - exceeded 300 ms
+   CORRUPT H09  - H09: non-numeric score on line 3 'abc'
+   CORRUPT H10  - H10: expected 10 score lines but found 3
+   MISSING H11  - no such file
+   MISSING H12  - no such file
+Expected: ok=6 (H05, H06 no longer OK), corrupt=2, missing=2, unexpected+timeout=2, and the run still completed with a consistent summary: true

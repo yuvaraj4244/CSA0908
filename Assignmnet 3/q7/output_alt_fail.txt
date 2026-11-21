@@ -1,0 +1,7 @@
+Java 21.0.12.1
+=== Failure in ONE file (H05 throws IllegalStateException) - 12 files expected in the summary ===
+parallelStream (no catch in lambda): terminal operation threw java.lang.IllegalStateException: java.lang.IllegalStateException: injected bug for H05; results collected before the abort = 7 of 12 (varies per run) -> summary INCOMPLETE
+parallelStream (catch inside lambda): results = 12 of 12, H05 -> UNEXPECTED
+   [uncaught handler] file-H05 died: java.lang.IllegalStateException: injected bug for H05
+thread-per-file (no try/catch in the thread body): results = 11 of 12; H05 present? false -> that file is silently MISSING from the summary
+ExecutorService + Future (chosen design): results = 12 of 12; H05 -> UNEXPECTED; consistent=true

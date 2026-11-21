@@ -1,0 +1,5 @@
+approach,time_ms,peak_threads,extra_vmpeak_mb
+pool2,182.0
+pool4,116.0
+parallelStream,94.43824633333334
+threadPerFile,4278.087872666667,10007,9942.5
