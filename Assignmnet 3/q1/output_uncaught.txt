@@ -1,0 +1,8 @@
+Calling withdraw() with a null card-file name ...
+   [finally] card ejected, reader closed
+Exception in thread "main" java.lang.NullPointerException
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:144)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:106)
+	at java.base/java.io.FileReader.<init>(FileReader.java:60)
+	at Atm.withdraw(Atm.java:46)
+	at AtmUncaught.main(AtmUncaught.java:7)

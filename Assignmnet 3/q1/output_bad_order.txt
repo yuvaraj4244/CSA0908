@@ -1,0 +1,7 @@
+BadOrder.java:12: error: exception FileNotFoundException has already been caught
+        } catch (FileNotFoundException e) {      // ... narrow (subclass) afterwards  -> unreachable
+          ^
+BadOrder.java:16: error: exception InputMismatchException has already been caught
+        } catch (InputMismatchException e) {     // ... child afterwards -> unreachable
+          ^
+2 errors

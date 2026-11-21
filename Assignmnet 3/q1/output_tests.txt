@@ -1,0 +1,44 @@
+Test                             input          catch block that handled it              finally ran?
+-- T1 valid withdrawal            input='1001 500'
+   DISPENSED 500 (new balance 2000)
+   [finally] card ejected, reader closed
+RESULT T1 valid withdrawal              '1001 500'     (none - success)                         YES
+-- T2 letters in account number   input='abcd 500'
+   Please type digits only (InputMismatchException)
+   [finally] card ejected, reader closed
+RESULT T2 letters in account number     'abcd 500'     catch(InputMismatch | NumberFormat)      YES
+-- T3 letters in amount           input='1001 five'
+   Please type digits only (NumberFormatException)
+   [finally] card ejected, reader closed
+RESULT T3 letters in amount             '1001 five'    catch(InputMismatch | NumberFormat)      YES
+-- T4 negative amount             input='1001 -200'
+   Invalid amount: Amount must be a positive multiple of 100 but was -200
+   [finally] card ejected, reader closed
+RESULT T4 negative amount               '1001 -200'    catch(InvalidAmountException)            YES
+-- T5 more than balance           input='1002 500'
+   Declined: Balance 100 < requested 500
+   [finally] card ejected, reader closed
+RESULT T5 more than balance             '1002 500'     catch(InsufficientFundsException)        YES
+-- T6 card-reader file missing    input='1001 500'
+   Card reader unavailable: cards/NO_SUCH_FILE.txt (No such file or directory)
+   [finally] card ejected, reader closed
+RESULT T6 card-reader file missing      '1001 500'     catch(FileNotFoundException)             YES
+-- T7 unknown account             input='9999 500'
+   Card problem: No account 9999
+   [finally] card ejected, reader closed
+RESULT T7 unknown account               '9999 500'     catch(AccountNotFound | CardData)        YES
+-- T8 corrupt card file           input='1001 500'
+   Card problem: Corrupt record: '1001,abc'
+   [finally] card ejected, reader closed
+RESULT T8 corrupt card file             '1001 500'     catch(AccountNotFound | CardData)        YES
+-- T9 no input at all (EOF)       input=''
+   No input received
+   [finally] card ejected, reader closed
+RESULT T9 no input at all (EOF)         ''             catch(NoSuchElementException)            YES
+-- T10 amount not multiple of 100 input='1001 150'
+   Invalid amount: Amount must be a positive multiple of 100 but was 150
+   [finally] card ejected, reader closed
+RESULT T10 amount not multiple of 100   '1001 150'     catch(InvalidAmountException)            YES
+-- T11 unhandled bug: null card file name
+   [finally] card ejected, reader closed
+RESULT T11 propagated out of withdraw(): NullPointerException; finally ran? YES

@@ -1,0 +1,24 @@
+Java 21.0.12.1
+=== error-code version on the same inputs ===
+input='1001 500  ' file=cards/accounts.txt         -> code 0
+input='abcd 500  ' file=cards/accounts.txt         -> code -1
+input='1001 five ' file=cards/accounts.txt         -> code -2
+input='1001 -200 ' file=cards/accounts.txt         -> code -2
+input='1002 500  ' file=cards/accounts.txt         -> code -5
+input='1001 500  ' file=cards/NO_SUCH_FILE.txt     -> code -3
+input='9999 500  ' file=cards/accounts.txt         -> code -4
+input='          ' file=cards/accounts.txt         -> code -1
+
+=== cost of one FAILED call (ns per call, allocated bytes per call); mean of 200,000 calls after warm-up ===
+depth    | new Exception (stack trace)  | exception w/o stack trace    | error code (return -1)       | slowdown ex/code  
+1        |        474 ns        728 B |        100 ns         40 B |       41.2 ns          0 B |         12x
+CSV,1,473.79294,728.00188,100.45269,40.0,41.196225,0.0
+10       |       1297 ns        728 B |        486 ns         40 B |       14.2 ns          0 B |         91x
+CSV,10,1297.03824,728.0,486.170235,40.0,14.22793,0.0
+50       |       3558 ns       1416 B |       1743 ns         40 B |       46.9 ns          0 B |         76x
+CSV,50,3558.073075,1416.0,1742.530605,40.0,46.929195,0.0
+200      |      13542 ns       4856 B |       6926 ns         40 B |      959.9 ns          0 B |         14x
+CSV,200,13541.5237,4856.0,6925.54827,40.0,959.86434,0.0
+
+Success path (nothing thrown), 100M iterations: with try/catch 49.9 ms, without 44.7 ms (sink 300000000)
+(sink=1200000)
