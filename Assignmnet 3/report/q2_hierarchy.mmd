@@ -1,0 +1,17 @@
+classDiagram
+direction TB
+class Exception
+class RuntimeException
+class ExamException { <<checked>> }
+class ExamClosedException { <<checked>> }
+class NotRegisteredException { <<checked>> }
+class AnswerTooLargeException { <<checked>> }
+class SubmissionStorageException { <<checked>> +cause: IOException }
+class InvalidRequestException { <<unchecked>> }
+Exception <|-- ExamException
+ExamException <|-- ExamClosedException
+ExamException <|-- NotRegisteredException
+ExamException <|-- AnswerTooLargeException
+ExamException <|-- SubmissionStorageException
+Exception <|-- RuntimeException
+RuntimeException <|-- InvalidRequestException

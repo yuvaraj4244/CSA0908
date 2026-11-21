@@ -1,0 +1,14 @@
+sequenceDiagram
+participant C as ExamController
+participant S as ExamService
+participant T as Storage
+participant OS as java.nio / OS
+C->>S: submit(student, course, file, size)
+S->>S: check window / registration / size
+S->>T: save(file, bytes)
+T->>OS: Files.writeString(...)
+OS-->>T: throws IOException (NoSuchFileException)
+T-->>S: throws SubmissionStorageException (cause = IOException)
+S-->>C: propagates unchanged (throws ExamException)
+C->>C: catch (ExamException e): log full trace, show friendly message
+Note over C: Student sees: "We could not save your answer. Please try again in a minute."

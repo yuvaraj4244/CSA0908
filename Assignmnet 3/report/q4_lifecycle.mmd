@@ -1,0 +1,11 @@
+stateDiagram-v2
+[*] --> NEW: new Station()
+NEW --> RUNNABLE: start()
+RUNNABLE --> TIMED_WAITING: sleep(ms)
+TIMED_WAITING --> RUNNABLE: time elapsed
+RUNNABLE --> WAITING: join() / wait()
+WAITING --> RUNNABLE: notify / joined thread ends
+RUNNABLE --> BLOCKED: waiting for a monitor lock
+BLOCKED --> RUNNABLE: lock acquired
+RUNNABLE --> TERMINATED: run() returns
+TERMINATED --> [*]

@@ -1,0 +1,32 @@
+classDiagram
+direction TB
+class Throwable
+class Error
+class Exception
+class RuntimeException
+class IOException
+class FileNotFoundException
+class NoSuchElementException
+class InputMismatchException
+class IllegalArgumentException
+class NumberFormatException
+class InvalidAmountException
+class InsufficientFundsException
+class AccountNotFoundException
+class CardDataException
+Throwable <|-- Error
+Throwable <|-- Exception
+Exception <|-- RuntimeException
+Exception <|-- IOException
+IOException <|-- FileNotFoundException
+RuntimeException <|-- NoSuchElementException
+NoSuchElementException <|-- InputMismatchException
+RuntimeException <|-- IllegalArgumentException
+IllegalArgumentException <|-- NumberFormatException
+IllegalArgumentException <|-- InvalidAmountException
+Exception <|-- InsufficientFundsException
+Exception <|-- AccountNotFoundException
+Exception <|-- CardDataException
+note for Error "unchecked: OutOfMemoryError, StackOverflowError - not caught by the ATM"
+note for InsufficientFundsException "CHECKED (user-defined)"
+note for InvalidAmountException "UNCHECKED (user-defined)"

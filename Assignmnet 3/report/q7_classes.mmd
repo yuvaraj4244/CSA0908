@@ -1,0 +1,20 @@
+classDiagram
+direction LR
+class ScoreProcessor {
+ +run(dir, ids, threads, latency, bugHook, timeoutMs) Summary
+ +process(dir, id) int
+}
+class FileTask { <<Callable~Result~>> +call() Result }
+class Result { <<record>> id, status, total, detail }
+class Status { <<enum>> OK CORRUPT MISSING IO_ERROR UNEXPECTED TIMEOUT }
+class Summary { +count(Status) +consistent() +text() }
+class CorruptFileException { <<checked>> }
+class ExecutorService { <<fixed thread pool>> }
+class ConcurrentHashMap { id -> Result }
+ScoreProcessor --> ExecutorService : submit
+ExecutorService --> FileTask : runs
+FileTask --> Result : returns
+FileTask ..> CorruptFileException : catches
+FileTask --> ConcurrentHashMap : put(id, result)
+ScoreProcessor --> Summary : builds from the map
+Result --> Status
