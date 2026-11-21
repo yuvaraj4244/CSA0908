@@ -1,0 +1,2 @@
+main: Station-D is a DAEMON; main() ends now, isAlive=true
+JVM exiting: finished stations = [] (scanned=0)

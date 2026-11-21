@@ -1,0 +1,31 @@
+Java 21.0.12.1, cores=2
+
+=== completion time for n=40 scripts of 20 ms each, fixed pool of p threads (mean of 5 runs) ===
+p      predicted ceil(n/p)*c measured (ms)  ratio       
+1      800                   809.7          1.01
+CSV_TIME,1,800,809.725698
+2      400                   404.7          1.01
+CSV_TIME,2,400,404.732153
+4      200                   202.5          1.01
+CSV_TIME,4,200,202.4913526
+8      100                   102.3          1.02
+CSV_TIME,8,100,102.2706618
+16     60                    62.6           1.04
+CSV_TIME,16,60,62.5584584
+40     20                    27.6           1.38
+CSV_TIME,40,20,27.5664992
+
+=== memory: m parked threads (own Thread objects) vs fixed pool of 4 handling m tasks ===
+m        approach                     peak threads   VmRSS +MB      VmSize +MB  
+200      m Thread objects             206            19.3           160.1       
+CSV_MEM,200,threads,206,19712,163896
+200      fixed pool of 4              10             0.3            0.0         
+CSV_MEM,200,pool4,10,336,0
+1000     m Thread objects             1006           31.9           960.0       
+CSV_MEM,1000,threads,1006,32636,983040
+1000     fixed pool of 4              10             0.3            0.0         
+CSV_MEM,1000,pool4,10,336,0
+4000     m Thread objects             4006           74.4           3960.3      
+CSV_MEM,4000,threads,4006,76168,4055304
+4000     fixed pool of 4              10             0.1            0.0         
+CSV_MEM,4000,pool4,10,128,0

@@ -1,0 +1,2 @@
+main: Station-D is a normal (user) thread; main() ends now, isAlive=true
+JVM exiting: finished stations = [Station-D] (scanned=40)

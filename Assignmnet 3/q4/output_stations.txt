@@ -1,0 +1,36 @@
+Java 21.0.12.1, cores=2
+
+=== 1. Extending Thread: states and join() ===
+before start(): state=NEW isAlive=false
+10 ms later   : state=TIMED_WAITING isAlive=true   (sleeping inside work(): TIMED_WAITING)
+after join()  : state=TERMINATED isAlive=false
+Total scripts scanned: 60 (expected 60)  finish order: [Station-4, Station-3, Station-1, Station-2]
+
+=== 2. Implementing Runnable (wrapped in new Thread) ===
+Total scripts scanned: 60 (expected 60)  finish order: [Station-2, Station-1, Station-4, Station-3]
+
+=== 3. run() instead of start(): no new thread is created ===
+calling probe.run():
+   body executed by thread: main
+calling probe.start():
+   body executed by thread: Station-X
+4 stations via run():   252 ms (sequential, all in main; started? state of Station-1 = NEW)
+4 stations via start(): 64 ms (concurrent)
+
+=== 4. Order in which the stations finish: 15 runs (equal batches of 15 scripts) ===
+run  1: S3 < S1 < S2 < S4
+run  2: S2 < S3 < S1 < S4
+run  3: S1 < S4 < S2 < S3
+run  4: S1 < S2 < S3 < S4
+run  5: S1 < S3 < S2 < S4
+run  6: S1 < S4 < S3 < S2
+run  7: S1 < S3 < S4 < S2
+run  8: S1 < S2 < S3 < S4
+run  9: S1 < S2 < S3 < S4
+run 10: S1 < S4 < S3 < S2
+run 11: S1 < S4 < S3 < S2
+run 12: S1 < S4 < S2 < S3
+run 13: S1 < S2 < S3 < S4
+run 14: S4 < S2 < S3 < S1
+run 15: S1 < S2 < S4 < S3
+distinct finishing orders seen in 15 runs: 9; first finisher counts: {S1=12, S2=1, S3=1, S4=1}
