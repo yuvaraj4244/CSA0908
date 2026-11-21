@@ -1,0 +1,4 @@
+strategy,total_ms
+one GLOBAL lock for the whole cinema,493.8986145
+one lock PER SCREEN (synchronized block),24.48580025
+per-seat CAS (payment after winning the seat),26.873817

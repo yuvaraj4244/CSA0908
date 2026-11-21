@@ -1,0 +1,56 @@
+Java 21.0.12.1, cores=2
+
+=== A. Reliable reproduction: 100 threads released together by a CountDownLatch, 10 seats (10 users per seat), 200 trials ===
+version                trials with a double booking total double bookings    max 'seats sold' (>10?) sold<10 (lost update)
+unsynchronized         41                     72                       15                     0                 
+CSV_REPRO,unsynchronized,41,72,15
+synchronized method    0                      0                        10                     0                 
+CSV_REPRO,synchronized method,0,0,10
+synchronized block     0                      0                        10                     0                 
+CSV_REPRO,synchronized block,0,0,10
+AtomicBoolean[] CAS    0                      0                        10                     0                 
+CSV_REPRO,AtomicBoolean[] CAS,0,0,10
+ReentrantLock          0                      0                        10                     0                 
+CSV_REPRO,ReentrantLock,0,0,10
+ConcurrentHashMap      0                      0                        10                     0                 
+CSV_REPRO,ConcurrentHashMap,0,0,10
+
+=== B. Time to process 10,000 booking attempts (2,000 seats, 8 threads), mean of 7 runs after 3 warm-ups ===
+-- non-critical work per booking = none
+version                    total ms   ns / booking  double bookings
+synchronized method            6.71            671                0
+CSV_TIME,0,synchronized method,6.711061428571428,0
+synchronized block             6.03            603                0
+CSV_TIME,0,synchronized block,6.034668714285715,0
+AtomicBoolean[] CAS            1.51            151                0
+CSV_TIME,0,AtomicBoolean[] CAS,1.5110462857142857,0
+ReentrantLock                  6.06            606                0
+CSV_TIME,0,ReentrantLock,6.061704571428572,0
+ConcurrentHashMap              9.41            941                0
+CSV_TIME,0,ConcurrentHashMap,9.405412142857143,0
+-- non-critical work per booking = 3000 iterations (pricing/QR code, outside the critical section if the version allows)
+version                    total ms   ns / booking  double bookings
+synchronized method          113.09          11309                0
+CSV_TIME,3000,synchronized method,113.08865757142857,0
+synchronized block            52.48           5248                0
+CSV_TIME,3000,synchronized block,52.47724671428572,0
+AtomicBoolean[] CAS           34.11           3411                0
+CSV_TIME,3000,AtomicBoolean[] CAS,34.10562585714286,0
+ReentrantLock                 49.79           4979                0
+CSV_TIME,3000,ReentrantLock,49.792173428571424,0
+ConcurrentHashMap             36.11           3611                0
+CSV_TIME,3000,ConcurrentHashMap,36.11121957142858,0
+
+=== C. Static state shared by ALL screens: instance-synchronized vs static-synchronized vs AtomicLong ===
+instance synchronized (locks 'this')     expected 1,000,000; last run total=850,711; runs with lost updates: 20 of 20
+static synchronized (locks the Class)    expected 1,000,000; last run total=1,000,000; runs with lost updates: 0 of 20
+AtomicLong                               expected 1,000,000; last run total=1,000,000; runs with lost updates: 0 of 20
+
+=== D. Cinema with 20 screens: 20 client threads (one per screen), 200 bookings each, 50 microsecond simulated payment/DB write per booking ===
+strategy                                             total ms  bookings/second
+one GLOBAL lock for the whole cinema                    493.9             8099
+CSV_SCREENS,one GLOBAL lock for the whole cinema,493.8986145
+one lock PER SCREEN (synchronized block)                 24.5           163360
+CSV_SCREENS,one lock PER SCREEN (synchronized block),24.48580025
+per-seat CAS (payment after winning the seat)            26.9           148844
+CSV_SCREENS,per-seat CAS (payment after winning the seat),26.873817

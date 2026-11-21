@@ -1,0 +1,11 @@
+noncritical_work,version,total_ms_10000_bookings,double_bookings
+0,synchronized method,6.711061428571428,0
+0,synchronized block,6.034668714285715,0
+0,AtomicBoolean[] CAS,1.5110462857142857,0
+0,ReentrantLock,6.061704571428572,0
+0,ConcurrentHashMap,9.405412142857143,0
+3000,synchronized method,113.08865757142857,0
+3000,synchronized block,52.47724671428572,0
+3000,AtomicBoolean[] CAS,34.10562585714286,0
+3000,ReentrantLock,49.792173428571424,0
+3000,ConcurrentHashMap,36.11121957142858,0

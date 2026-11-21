@@ -1,0 +1,7 @@
+version,trials_with_double_booking_of_200,total_double_bookings,max_seats_sold
+unsynchronized,41,72,15
+synchronized method,0,0,10
+synchronized block,0,0,10
+AtomicBoolean[] CAS,0,0,10
+ReentrantLock,0,0,10
+ConcurrentHashMap,0,0,10
