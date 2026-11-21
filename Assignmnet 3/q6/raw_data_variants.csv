@@ -1,0 +1,5 @@
+variant,correct_runs,wrong_sum_runs,hung_runs,min_size_seen,max_size_seen
+while + notifyAll,500,0,0,0,5
+while + notify,500,0,0,0,5
+if + notifyAll,437,63,0,-19,5
+if + notify,459,41,0,-14,5

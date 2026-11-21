@@ -1,0 +1,15 @@
+Java 21.0.12.1, cores=2
+
+=== time per token through a capacity-5 counter (ns/token), 500,000 tokens, mean of 5 runs after 2 warm-ups ===
+design                         1 producer/1 consumer 1 producer/2 consumers
+wait()/notifyAll() (TokenCounter) 5319               5459              
+CSV_PIPE,wait()/notifyAll() (TokenCounter),5318.568270000001,5459.237408399999
+ArrayBlockingQueue(5)          5268               8424              
+CSV_PIPE,ArrayBlockingQueue(5),5267.831415999999,8423.9379544
+
+=== time per transfer (ns), 100 accounts, 200,000 transfers per thread, mean of 5 runs ===
+design                             1 thread         4 threads       
+synchronized + lock ordering       61               290             
+CSV_XFER,synchronized + lock ordering,60.82365000000001,289.692941
+ReentrantLock.tryLock(timeout) + retry 60               509             
+CSV_XFER,ReentrantLock.tryLock(timeout) + retry,60.039559,508.9487270000001

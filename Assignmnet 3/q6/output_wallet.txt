@@ -1,0 +1,19 @@
+Java 21.0.12.1
+
+=== 1. Two transfers that reliably deadlock: T1: A -> B, T2: B -> A (50 ms pause between the two locks) ===
+after 1 s: T1 alive=true (state BLOCKED), T2 alive=true (state BLOCKED)
+JVM deadlock detector (ThreadMXBean.findDeadlockedThreads):
+   T1(A->B) is BLOCKED on WalletLab$Account@b4c966a which is held by T2(B->A)
+   T2(B->A) is BLOCKED on WalletLab$Account@312b1dae which is held by T1(A->B)
+balances unchanged: A=1000 B=1000
+
+=== 2. Same two transfers with the consistent ordering rule (lock the account with the smaller id first) ===
+both finished: true; balances C=1000 D=1000 (sum 2000, expected 2000)
+
+=== 3. Random transfers among 5 accounts, 8 threads x 2,000 transfers, 20 trials per version (declared deadlocked if not finished in 3 s) ===
+unsafe (from, then to)       deadlocked trials: 20 of 20 | finished trials:  0, total money conserved in  0 | mean time of finished trials: n/a
+CSV_TRIALS,unsafe (from, then to),20,0,0,-1.0,0
+ordered (smaller id first)   deadlocked trials:  0 of 20 | finished trials: 20, total money conserved in 20 | mean time of finished trials: 4.1 ms
+CSV_TRIALS,ordered (smaller id first),0,20,20,4.072263700000001,0
+tryLock + back-off           deadlocked trials:  0 of 20 | finished trials: 20, total money conserved in 20 | mean time of finished trials: 22.8 ms
+CSV_TRIALS,tryLock + back-off,0,20,20,22.76573565,368

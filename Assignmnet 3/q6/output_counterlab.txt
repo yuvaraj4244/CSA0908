@@ -1,0 +1,30 @@
+Java 21.0.12.1
+
+=== 1. Counter size after each of the 40 operations (1 cook, 2 students, capacity 5), one run ===
+[1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
+min=0 max=5
+
+=== 2. Same check over many runs: size always within [0, capacity]? (while + notifyAll, 1 cook x 20 tokens, 2 students x 10, 500 runs) ===
+smallest size ever seen = 0, largest = 5, wrong sums = 0, hung runs = 0  (500 runs)
+
+=== 3. Variants (1 cook, 2 students, capacity 5; 500 runs each; run declared hung after 200 ms) ===
+variant                      correct sum  wrong sum    hung         size range seen       
+while + notifyAll            500          0            0            [0, 5]
+CSV_VARIANT,while + notifyAll,500,0,0,0,5
+while + notify               500          0            0            [0, 5]
+CSV_VARIANT,while + notify,500,0,0,0,5
+if + notifyAll               437          63           0            [-19, 5]
+CSV_VARIANT,if + notifyAll,437,63,0,-19,5
+if + notify                  459          41           0            [-14, 5]
+CSV_VARIANT,if + notify,459,41,0,-14,5
+
+=== 4. notify() with SEVERAL producers AND several consumers (2 cooks x 20 tokens, 2 students x 20; 300 runs, hung after 200 ms) ===
+capacity     variant                      correct      wrong        hung        
+1            while + notifyAll            300          0            0           
+CSV_NOTIFY,1,while + notifyAll,300,0,0
+1            while + notify               0            0            300         
+CSV_NOTIFY,1,while + notify,0,0,300
+5            while + notifyAll            300          0            0           
+CSV_NOTIFY,5,while + notifyAll,300,0,0
+5            while + notify               300          0            0           
+CSV_NOTIFY,5,while + notify,300,0,0

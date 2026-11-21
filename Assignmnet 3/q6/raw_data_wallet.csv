@@ -1,0 +1,4 @@
+version,deadlocked_trials,finished_trials,money_conserved_trials,mean_ms,retries
+"unsafe (from, then to)",20,0,0,-1.0,0
+ordered (smaller id first),0,20,20,4.072263700000001,0
+tryLock + back-off,0,20,20,22.76573565,368

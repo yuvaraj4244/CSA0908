@@ -1,0 +1,3 @@
+design,ns_per_token_1p1c,ns_per_token_1p2c
+wait()/notifyAll() (TokenCounter),5318.568270000001,5459.237408399999
+ArrayBlockingQueue(5),5267.831415999999,8423.9379544
