@@ -1,0 +1,7 @@
+Saved answer01.pdf
+Exception in thread "main" SubmissionStorageException: Could not store answer02.pdf
+	at Storage.save(StorageDemoUnchecked.java:17)
+	at StorageDemoUnchecked.main(StorageDemoUnchecked.java:25)
+Caused by: java.io.IOException: Disk quota exceeded
+	at Storage.save(StorageDemoUnchecked.java:14)
+	... 1 more

@@ -1,0 +1,52 @@
+=== Scenario table ===
+   [storage] saved a1.pdf
+   [storage] saved a1.pdf
+
+Scenario                             | Exception thrown         | Message shown to the student                                   | Logged?
+1 valid submission                   | (none)                   | Submission accepted: a1.pdf                                    | no
+2 window closed (ExamClosed)         | ExamClosedException      | Sorry, the exam window is closed.                              | no
+3 not registered (NotRegistered)     | NotRegisteredException   | You are not registered for CSA09. Contact the exam cell.       | no
+4 file too large (AnswerTooLarge)    | AnswerTooLargeException  | Your file is too large (limit 500 KB). Please compress it and retry. | no
+5 storage failure (Storage)          | SubmissionStorageException | We could not save your answer. Please try again in a minute.   | yes
+6 blank student id (unchecked)       | InvalidRequestException  | Invalid request.                                               | yes
+
+=== Chaining evidence (storage failure): walking getCause() ===
+level 1: SubmissionStorageException: Could not store missing_dir/a5.pdf
+  level 2: java.nio.file.NoSuchFileException: /tmp/exam-storage15155872153632381396/missing_dir/a5.pdf
+
+--- full chained stack trace (printStackTrace) ---
+SubmissionStorageException: Could not store missing_dir/a5.pdf
+	at Storage.save(Portal.java:41)
+	at ExamService.submit(Portal.java:61)
+	at PortalTests.main(PortalTests.java:29)
+Caused by: java.nio.file.NoSuchFileException: /tmp/exam-storage15155872153632381396/missing_dir/a5.pdf
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261)
+	at java.base/java.nio.file.spi.FileSystemProvider.newOutputStream(FileSystemProvider.java:482)
+	at java.base/java.nio.file.Files.newOutputStream(Files.java:228)
+	at java.base/java.nio.file.Files.write(Files.java:3505)
+	at java.base/java.nio.file.Files.writeString(Files.java:3727)
+	at java.base/java.nio.file.Files.writeString(Files.java:3667)
+	at Storage.save(Portal.java:37)
+	... 2 more
+
+=== What is lost when the exception is re-thrown WITHOUT its cause ===
+getCause() = null
+trace contains "Caused by"? false   (trace length 177 chars)
+--- stack trace without cause ---
+SubmissionStorageException: Could not store missing_dir/a5.pdf
+	at Storage.save(Portal.java:40)
+	at ExamService.submit(Portal.java:61)
+	at PortalTests.main(PortalTests.java:40)
+--> lost: the fact that it was a FileNotFoundException/NoSuchFile, the exact path, the OS message and the frames inside java.nio.
+
+=== Controller log (what the operators see) ===
+  SubmissionStorageException: Could not store missing_dir/a5.pdf
+  	at Storage.save(Portal.java:41)
+  	at ExamService.submit(Portal.java:61)
+  	at ExamController.submit(Portal.java:74)
+  ...
+  bad request: student id is required
+  ...

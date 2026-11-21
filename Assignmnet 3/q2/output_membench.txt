@@ -1,0 +1,22 @@
+Java 21.0.12.1
+
+=== creating one exception: ns and bytes allocated (mean of 100,000), by call depth and chain length ===
+depth   chain   | with stack trace           | no stack trace (4-arg ctor) | bytes per frame
+10      1       |       900 ns       728 B |        88 ns        40 B |       68.8
+CSV,10,1,900.21906,728.0,87.99128,40.0
+10      3       |      2221 ns      2280 B |        93 ns       216 B |       68.8
+CSV,10,3,2221.05817,2280.0,93.00122,216.0
+100     1       |      4195 ns      2792 B |       610 ns        40 B |       27.5
+CSV,100,1,4195.23169,2792.0,610.42706,40.0
+100     3       |      9914 ns      8472 B |       473 ns       216 B |       27.5
+CSV,100,3,9914.34691,8472.0,473.4397,216.0
+1000    1       |     38421 ns     22056 B |      7581 ns        40 B |       22.0
+CSV,1000,1,38420.5702,22056.0,7581.14475,40.0
+1000    3       |    113730 ns     66264 B |      7816 ns       216 B |       22.0
+CSV,1000,3,113729.68325,66264.0,7815.86295,216.0
+
+=== materialising the trace: getStackTrace() and printStackTrace() size, depth 100 ===
+chain=1: 102 StackTraceElements, ~5864 bytes allocated to materialise them, printed trace = 6251 characters
+chain=2: 204 StackTraceElements, ~11488 bytes allocated to materialise them, printed trace = 6369 characters
+chain=5: 510 StackTraceElements, ~28720 bytes allocated to materialise them, printed trace = 6540 characters
+(sink=1416659611126878)
