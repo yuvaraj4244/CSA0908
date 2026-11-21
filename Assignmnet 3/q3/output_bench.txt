@@ -1,0 +1,20 @@
+Java 21.0.12.1
+f files  version                   time (ms) peak open handles left open at end (ALL good files)
+100      try-with-resources            23.11                2                  0
+CSV,100,try-with-resources,23.1081226,2,0
+100      manual finally                11.37                2                  0
+CSV,100,manual finally,11.3704156,2,0
+100      no close at all                7.99              100                100
+CSV,100,no close at all,7.9898662,100,100
+500      try-with-resources            25.45                2                  0
+CSV,500,try-with-resources,25.4483334,2,0
+500      manual finally                18.89                2                  0
+CSV,500,manual finally,18.892187,2,0
+500      no close at all               17.79              500                500
+CSV,500,no close at all,17.7937534,500,500
+2000     try-with-resources            74.74                2                  0
+CSV,2000,try-with-resources,74.7392962,2,0
+2000     manual finally                66.16                2                  0
+CSV,2000,manual finally,66.1566632,2,0
+2000     no close at all              107.12             2000               2000
+CSV,2000,no close at all,107.1170144,2000,2000

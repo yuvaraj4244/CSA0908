@@ -1,0 +1,3 @@
+naive    N=300  opened=60 closed=1 LEFT OPEN=59 peak open=60  | failures reported as 'bad record'=59, failures reported as 'Too many open files'=241
+finally  N=300  opened=301 closed=301 LEFT OPEN=0 peak open=2  | failures reported as 'bad record'=300, failures reported as 'Too many open files'=0
+twr      N=300  opened=301 closed=301 LEFT OPEN=0 peak open=2  | failures reported as 'bad record'=300, failures reported as 'Too many open files'=0

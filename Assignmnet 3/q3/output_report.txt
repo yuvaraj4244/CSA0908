@@ -1,0 +1,59 @@
+Java 21.0.12.1
+
+=== 1. Same report on GOOD input (store1, store2, store4)? Hand-checked: 415.00 + 115.00 + 150.00 = 680.00 ===
+manual (close in try body)   opened=4 closed=4 LEFT OPEN=0 peak open=2
+manual (close in finally)    opened=4 closed=4 LEFT OPEN=0 peak open=2
+try-with-resources           opened=4 closed=4 LEFT OPEN=0 peak open=2
+DAILY SALES REPORT
+store1.txt: 415.00
+store2.txt: 115.00
+store4.txt: 150.00
+TOTAL (3 of 3 stores): 680.00
+All three reports identical: true; total 680.00 matches hand check: true
+
+=== 2. FAILING input: store3 has a corrupt line (3rd line), store5 does not exist ===
+manual (close in try body)   opened=5 closed=4 LEFT OPEN=1 peak open=3
+   (report text)
+   | DAILY SALES REPORT
+   | store1.txt: 415.00
+   | store2.txt: 115.00
+   | store3.txt: FAILED (bad record - line 3: java.lang.NumberFormatException: For input string: "x")
+   | store4.txt: 150.00
+   | store5.txt: FAILED (FileNotFoundException: stores/store5.txt (No such file or directory))
+   | TOTAL (3 of 5 stores): 680.00
+manual (close in finally)    opened=5 closed=5 LEFT OPEN=0 peak open=2
+try-with-resources           opened=5 closed=5 LEFT OPEN=0 peak open=2
+   --- log: which file caused each failure ---
+   LOG FAILED file=stores/store3.txt cause=BadRecordException: stores/store3.txt: line 3: java.lang.NumberFormatException: For input string: "x"
+   LOG FAILED file=stores/store5.txt cause=java.io.FileNotFoundException: stores/store5.txt (No such file or directory)
+Reports identical for failing input too: true
+
+=== 3. Peak open handles for f = 3 stores: sequential versions vs 'hold all readers at once' ===
+try-with-resources (one reader at a time): opened=4 closed=4 LEFT OPEN=0 peak open=2
+hold-all design (perfectly closed):         opened=3 closed=3 LEFT OPEN=0 peak open=3
+
+=== 4. Closing order and suppressed exceptions ===
+-- (a) normal run, two resources: closing is in REVERSE order of opening
+   open  A (opened first)
+   open  B (opened second)
+   body runs
+   close B (opened second)
+   close A (opened first)
+-- (b) body throws AND close() throws: the BODY exception wins, the close exception is SUPPRESSED
+   open  A
+   open  B
+   close B
+   close A
+   caught: exception from the body
+   suppressed: close() of B failed
+   suppressed: close() of A failed
+-- (c) same situation with manual try/finally: the close exception REPLACES the body exception (original lost)
+   open  A
+   close A
+   caught: close() of A failed   (suppressed: 0)
+
+=== 5. When try-with-resources alone is NOT enough: crash while writing the summary ===
+plain write failed: simulated crash while writing
+atomic write failed: simulated crash while writing
+plain  file now contains: [DAILY SALES REPORT\nstore1.txt: 415.00\nstore2.txt: 115.00\nstore3.txt: FAILED (bad record - line 3: java.lang.NumberFormatException: For input strin]   <- truncated, incomplete report (resource closed correctly, data still wrong)
+atomic file now contains: [YESTERDAY'S COMPLETE REPORT\n]   <- previous complete report still intact

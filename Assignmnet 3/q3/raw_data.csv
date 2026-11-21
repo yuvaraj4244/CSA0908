@@ -1,0 +1,10 @@
+files,version,time_ms,peak_open_handles,left_open_at_end
+100,try-with-resources,23.1081226,2,0
+100,manual finally,11.3704156,2,0
+100,no close at all,7.9898662,100,100
+500,try-with-resources,25.4483334,2,0
+500,manual finally,18.892187,2,0
+500,no close at all,17.7937534,500,500
+2000,try-with-resources,74.7392962,2,0
+2000,manual finally,66.1566632,2,0
+2000,no close at all,107.1170144,2000,2000

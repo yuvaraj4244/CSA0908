@@ -1,0 +1,53 @@
+Initializing jdb ...
+> Deferring breakpoint SalesReport:64.
+It will be set after the class is loaded.
+> Deferring breakpoint SalesReport:65.
+It will be set after the class is loaded.
+> Deferring breakpoint SalesReport:68.
+It will be set after the class is loaded.
+> run DebugMain
+Set uncaught java.lang.Throwable
+Set deferred uncaught java.lang.Throwable
+> 
+VM Started: Set deferred breakpoint SalesReport:68
+Set deferred breakpoint SalesReport:65
+Set deferred breakpoint SalesReport:64
+
+Breakpoint hit: "thread=main", SalesReport.manualNaive(), line=64 bci=67
+64                    double s = parseStore(r, f);          // <-- throws on a corrupt line ...
+
+main[1]  f = "stores/store1.txt"
+main[1]  Tracker.current = "2"
+main[1] > 
+Breakpoint hit: "thread=main", SalesReport.manualNaive(), line=65 bci=76
+65                    r.close();                            // <-- ... so this close() is skipped: the handle LEAKS
+
+main[1]  f = "stores/store1.txt"
+main[1]  Tracker.current = "2"
+main[1] > 
+Breakpoint hit: "thread=main", SalesReport.manualNaive(), line=64 bci=67
+64                    double s = parseStore(r, f);          // <-- throws on a corrupt line ...
+
+main[1]  f = "stores/store3.txt"
+main[1]  Tracker.current = "2"
+main[1] > 
+Breakpoint hit: "thread=main", SalesReport.manualNaive(), line=68 bci=113
+68                    sb.append(lineFail(f, e)).append('\n'); log.add("FAILED file=" + f + " cause=" + e);
+
+main[1]  f = "stores/store3.txt"
+main[1]  Tracker.current = "2"
+main[1]  Tracker.closed = "1"
+main[1] Method arguments:
+files = instance of java.util.ImmutableCollections$List12(id=838)
+out = "summary_debug.txt"
+log = instance of Log(id=840)
+Local variables:
+sb = instance of java.lang.StringBuilder(id=841)
+total = 415.0
+ok = 1
+w = instance of TrackedWriter(id=842)
+f = "stores/store3.txt"
+e = instance of BadRecordException(id=843)
+main[1] > opened=3 closed=2 LEFT OPEN=1 peak open=2
+
+The application exited

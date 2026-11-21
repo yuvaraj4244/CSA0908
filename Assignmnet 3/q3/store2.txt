@@ -1,0 +1,3 @@
+pencil,20,2.00
+eraser,5,3.00
+ruler,4,15.00
